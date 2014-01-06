@@ -12,15 +12,15 @@ if [[ ! -d "$OUTPUT_DIRECTORY" ]]; then
     fi
 fi
 
-replace_booleans=false
-nuke_timestamps=false
-replace_factions=false
+replace_booleans=true
+nuke_timestamps=true
+replace_factions=true
 overwrite_output=false
 nuke_line_numbers=true
-replace_nulls=false
+replace_nulls=true
 dry_run=false
-replace_results=false
-nuke_versions=false
+replace_results=true
+nuke_versions=true
 
 # Process CLI parameters
 ARGS=$(getopt -n $0 -o bfFnNrtv -l "booleans,factions,force,nulls,dry-run,results,timestamps,versions" -- "$@")
@@ -33,28 +33,28 @@ eval set -- "$ARGS";
 while true; do
     case "$1" in
         -b|--booleans)
-            replace_booleans=true
+            replace_booleans=false
             ;;
         -f|--factions)
-            replace_factions=true
+            replace_factions=false
             ;;
         -F|--force)
             overwrite_output=true
             ;;
         -n|--nulls)
-            replace_nulls=true
+            replace_nulls=false
             ;;
         -N|--dry-run)
             dry_run=true
             ;;
         -r|--results)
-            replace_results=true
+            replace_results=false
             ;;
         -t|--timestamps)
-            nuke_timestamps=true
+            nuke_timestamps=false
             ;;
         -v|--versions)
-            nuke_versions=true
+            nuke_versions=false
             ;;
         --)
             shift
