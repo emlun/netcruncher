@@ -19,9 +19,10 @@ overwrite_output=false
 nuke_line_numbers=true
 dry_run=false
 replace_results=false
+nuke_versions=false
 
 # Process CLI parameters
-ARGS=$(getopt -n $0 -o bfFNrt -l "booleans,factions,force,dry-run,results,timestamps" -- "$@")
+ARGS=$(getopt -n $0 -o bfFNrtv -l "booleans,factions,force,dry-run,results,timestamps,versions" -- "$@")
 if [ $? -ne 0 ]; then
     exit 1
 fi
@@ -47,6 +48,9 @@ while true; do
             ;;
         -t|--timestamps)
             nuke_timestamps=true
+            ;;
+        -v|--versions)
+            nuke_versions=true
             ;;
         --)
             shift
@@ -135,6 +139,16 @@ if $nuke_timestamps; then
                 nuke_column "$c"
             fi
         done
+    fi
+fi
+
+if $nuke_versions; then
+    echo "Nuking versions..."
+    if ! $dry_run; then
+        c=$(colnum Version)
+        if [[ $? ]]; then
+            nuke_column "$c"
+        fi
     fi
 fi
 
