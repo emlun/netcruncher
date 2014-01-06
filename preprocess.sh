@@ -15,6 +15,7 @@ fi
 replace_booleans=false
 replace_factions=false
 overwrite_output=false
+nuke_line_numbers=true
 dry_run=false
 replace_results=false
 
@@ -89,13 +90,40 @@ replace() {
     IFS="$OLDIFS"
 }
 
+# Outputs the first column whose header equals the argument.
+# Exit code is 0 if the column was found, 1 otherwise.
+colnum() {
+    sought_header=$1
+    i=1
+    while true; do
+        header=$(head -n1 "$FILE" | cut -d , -f $i 2>/dev/null)
+        if [ -n "$header" ]; then
+            if [[ "$header" == $sought_header ]]; then
+                echo $i
+                return 0
+            fi
+            ((i++))
+        else
+            return 1
+            break
+        fi
+    done
+}
+
+if $nuke_line_numbers; then
+    echo "Nuking line numbers..."
+    if ! $dry_run; then
+        tmpfile=$(mktemp) && cut -d , -f 2- "$FILE" > "$tmpfile" && cat "$tmpfile" > "$FILE" && rm "$tmpfile"
+    fi
+fi
+
 # Replace faction name with numeral ID
 if $replace_factions; then
-    replace "$LEGEND_FACTIONS" 3 5
+    replace "$LEGEND_FACTIONS" $(colnum Player_Faction) $(colnum Opponent_Faction)
 fi
 
 if $replace_results; then
-    replace "$LEGEND_RESULTS" 8
+    replace "$LEGEND_RESULTS" $(colnum Result)
 fi
 
 if $replace_booleans; then
