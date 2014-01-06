@@ -17,12 +17,13 @@ nuke_timestamps=false
 replace_factions=false
 overwrite_output=false
 nuke_line_numbers=true
+replace_nulls=false
 dry_run=false
 replace_results=false
 nuke_versions=false
 
 # Process CLI parameters
-ARGS=$(getopt -n $0 -o bfFNrtv -l "booleans,factions,force,dry-run,results,timestamps,versions" -- "$@")
+ARGS=$(getopt -n $0 -o bfFnNrtv -l "booleans,factions,force,nulls,dry-run,results,timestamps,versions" -- "$@")
 if [ $? -ne 0 ]; then
     exit 1
 fi
@@ -39,6 +40,9 @@ while true; do
             ;;
         -F|--force)
             overwrite_output=true
+            ;;
+        -n|--nulls)
+            replace_nulls=true
             ;;
         -N|--dry-run)
             dry_run=true
@@ -170,5 +174,12 @@ if $replace_booleans; then
     echo "Replacing true with 1 (case insensitive)..."
     if ! $dry_run; then
         sed -i 's#true#1#gi' "$FILE"
+    fi
+fi
+
+if $replace_nulls; then
+    echo "Replacing NA with -1 ..."
+    if ! $dry_run; then
+        sed -i 's#NA#-1#g' "$FILE"
     fi
 fi
