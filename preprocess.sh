@@ -51,17 +51,26 @@ fi
 # Copy input file to output file
 cp "$1" "$FILE"
 
-# Replace faction name with numeral ID
-
-if $replace_factions; then
-    name_id=0
+# Function for replacing occurences of string values from given columns
+# with numeral values
+# Arg 1: legend file
+# Args 2-: which columns' values to use for replacements
+replace() {
+    legend_file=$1
+    shift
+    id=0
     OLDIFS="$IFS"
     IFS=$'\n'
-    for name in $( (cut -d , -f 3 "$FILE"; cut -d , -f 5 "$FILE") | sort -u | grep -v Faction); do
-    echo "Replacing ${name} with ${name_id} ..."
-    echo $name_id $name >> "$LEGEND_FACTIONS"
-    sed -i "s#${name}#${name_id}#g" "$FILE"
-    name_id=$(($name_id+1))
+    for string in $(for c in "$@"; do tail -n+2 "$FILE" | cut -d , -f "$c"; done | sort -u); do
+        echo "Replacing ${string} with ${id} ..."
+        echo $id $string >> "$legend_file"
+        sed -i "s#${string}#${id}#g" "$FILE"
+        id=$(($id+1))
     done
     IFS="$OLDIFS"
+}
+
+# Replace faction name with numeral ID
+if $replace_factions; then
+    replace "$LEGEND_FACTIONS" 3 5
 fi
