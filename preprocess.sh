@@ -11,8 +11,29 @@ if [[ ! -d "$OUTPUT_DIRECTORY" ]]; then
     fi
 fi
 
-replace_factions=true
+replace_factions=false
 
+# Process CLI parameters
+ARGS=$(getopt -n $0 -o f -l "factions" -- "$@")
+if [ $? -ne 0 ]; then
+    exit 1
+fi
+
+eval set -- "$ARGS";
+
+while true; do
+    case "$1" in
+        -f|--factions)
+            replace_factions=true
+            ;;
+        --)
+            shift
+            break
+    esac
+    shift || break
+done
+
+# Copy input file to output file
 cp "$1" "$FILE"
 
 # Replace faction name with numeral ID
