@@ -12,9 +12,10 @@ if [[ ! -d "$OUTPUT_DIRECTORY" ]]; then
 fi
 
 replace_factions=false
+overwrite_output=false
 
 # Process CLI parameters
-ARGS=$(getopt -n $0 -o f -l "factions" -- "$@")
+ARGS=$(getopt -n $0 -o fF -l "factions,force" -- "$@")
 if [ $? -ne 0 ]; then
     exit 1
 fi
@@ -26,12 +27,26 @@ while true; do
         -f|--factions)
             replace_factions=true
             ;;
+        -F|--force)
+            overwrite_output=true
+            ;;
         --)
             shift
             break
     esac
     shift || break
 done
+
+if ! $overwrite_output; then
+    if [[ -f "$FILE" ]]; then
+        echo "File $FILE already exists, aborting..."
+        exit 1
+    fi
+    if [[ $replace_factions && -f "$LEGEND_FACTIONS" ]]; then
+        echo "File $LEGEND_FACTIONS already exists, aborting..."
+        exit 1
+    fi
+fi
 
 # Copy input file to output file
 cp "$1" "$FILE"
