@@ -84,7 +84,7 @@ replace() {
         if ! $dry_run; then
             sed -i "s#${string}#${id}#g" "$FILE"
         fi
-        id=$(($id+1))
+        ((id++))
     done
     IFS="$OLDIFS"
 }
