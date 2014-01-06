@@ -13,9 +13,10 @@ fi
 
 replace_factions=false
 overwrite_output=false
+dry_run=false
 
 # Process CLI parameters
-ARGS=$(getopt -n $0 -o fF -l "factions,force" -- "$@")
+ARGS=$(getopt -n $0 -o fFN -l "factions,force,dry-run" -- "$@")
 if [ $? -ne 0 ]; then
     exit 1
 fi
@@ -30,6 +31,9 @@ while true; do
         -F|--force)
             overwrite_output=true
             ;;
+        -N|--dry-run)
+            dry_run=true
+            ;;
         --)
             shift
             break
@@ -37,7 +41,7 @@ while true; do
     shift || break
 done
 
-if ! $overwrite_output; then
+if ! $dry_run && ! $overwrite_output; then
     if [[ -f "$FILE" ]]; then
         echo "File $FILE already exists, aborting..."
         exit 1
@@ -64,7 +68,9 @@ replace() {
     for string in $(for c in "$@"; do tail -n+2 "$FILE" | cut -d , -f "$c"; done | sort -u); do
         echo "Replacing ${string} with ${id} ..."
         echo $id $string >> "$legend_file"
-        sed -i "s#${string}#${id}#g" "$FILE"
+        if ! $dry_run; then
+            sed -i "s#${string}#${id}#g" "$FILE"
+        fi
         id=$(($id+1))
     done
     IFS="$OLDIFS"
