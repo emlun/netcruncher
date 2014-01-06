@@ -12,13 +12,14 @@ if [[ ! -d "$OUTPUT_DIRECTORY" ]]; then
     fi
 fi
 
+replace_booleans=false
 replace_factions=false
 overwrite_output=false
 dry_run=false
 replace_results=false
 
 # Process CLI parameters
-ARGS=$(getopt -n $0 -o fFNr -l "factions,force,dry-run,results" -- "$@")
+ARGS=$(getopt -n $0 -o bfFNr -l "booleans,factions,force,dry-run,results" -- "$@")
 if [ $? -ne 0 ]; then
     exit 1
 fi
@@ -27,6 +28,9 @@ eval set -- "$ARGS";
 
 while true; do
     case "$1" in
+        -b|--booleans)
+            replace_booleans=true
+            ;;
         -f|--factions)
             replace_factions=true
             ;;
@@ -92,4 +96,16 @@ fi
 
 if $replace_results; then
     replace "$LEGEND_RESULTS" 8
+fi
+
+if $replace_booleans; then
+    echo "Replacing false with 0 (case insensitive)..."
+    if ! $dry_run; then
+        sed -i 's#false#0#gi' "$FILE"
+    fi
+
+    echo "Replacing true with 1 (case insensitive)..."
+    if ! $dry_run; then
+        sed -i 's#true#1#gi' "$FILE"
+    fi
 fi
