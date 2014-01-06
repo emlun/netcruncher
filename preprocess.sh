@@ -13,6 +13,7 @@ if [[ ! -d "$OUTPUT_DIRECTORY" ]]; then
 fi
 
 replace_booleans=false
+nuke_timestamps=false
 replace_factions=false
 overwrite_output=false
 nuke_line_numbers=true
@@ -20,7 +21,7 @@ dry_run=false
 replace_results=false
 
 # Process CLI parameters
-ARGS=$(getopt -n $0 -o bfFNr -l "booleans,factions,force,dry-run,results" -- "$@")
+ARGS=$(getopt -n $0 -o bfFNrt -l "booleans,factions,force,dry-run,results,timestamps" -- "$@")
 if [ $? -ne 0 ]; then
     exit 1
 fi
@@ -43,6 +44,9 @@ while true; do
             ;;
         -r|--results)
             replace_results=true
+            ;;
+        -t|--timestamps)
+            nuke_timestamps=true
             ;;
         --)
             shift
@@ -110,10 +114,27 @@ colnum() {
     done
 }
 
+nuke_column() {
+    col=$1
+    tmpfile=$(mktemp) && cut -d , -f -$(($col-1)),$(($col+1))- "$FILE" > "$tmpfile" && cat "$tmpfile" > "$FILE" && rm "$tmpfile"
+}
+
 if $nuke_line_numbers; then
     echo "Nuking line numbers..."
     if ! $dry_run; then
         tmpfile=$(mktemp) && cut -d , -f 2- "$FILE" > "$tmpfile" && cat "$tmpfile" > "$FILE" && rm "$tmpfile"
+    fi
+fi
+
+if $nuke_timestamps; then
+    echo "Nuking timestamps..."
+    if ! $dry_run; then
+        for header in GameStart Duration; do
+            c=$(colnum "$header")
+            if [[ $? ]]; then
+                nuke_column "$c"
+            fi
+        done
     fi
 fi
 
