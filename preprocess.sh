@@ -3,6 +3,7 @@
 OUTPUT_DIRECTORY=output
 FILE="$OUTPUT_DIRECTORY/processed.csv"
 LEGEND_FACTIONS="$OUTPUT_DIRECTORY/legend-factions.txt"
+LEGEND_RESULTS="$OUTPUT_DIRECTORY/legend-results.txt"
 
 if [[ ! -d "$OUTPUT_DIRECTORY" ]]; then
     if ! mkdir "$OUTPUT_DIRECTORY"; then
@@ -14,9 +15,10 @@ fi
 replace_factions=false
 overwrite_output=false
 dry_run=false
+replace_results=false
 
 # Process CLI parameters
-ARGS=$(getopt -n $0 -o fFN -l "factions,force,dry-run" -- "$@")
+ARGS=$(getopt -n $0 -o fFNr -l "factions,force,dry-run,results" -- "$@")
 if [ $? -ne 0 ]; then
     exit 1
 fi
@@ -34,6 +36,9 @@ while true; do
         -N|--dry-run)
             dry_run=true
             ;;
+        -r|--results)
+            replace_results=true
+            ;;
         --)
             shift
             break
@@ -48,6 +53,10 @@ if ! $dry_run && ! $overwrite_output; then
     fi
     if [[ $replace_factions && -f "$LEGEND_FACTIONS" ]]; then
         echo "File $LEGEND_FACTIONS already exists, aborting..."
+        exit 1
+    fi
+    if [[ $replace_results && -f "$LEGEND_RESULTS" ]]; then
+        echo "File $LEGEND_RESULTS already exists, aborting..."
         exit 1
     fi
 fi
@@ -79,4 +88,8 @@ replace() {
 # Replace faction name with numeral ID
 if $replace_factions; then
     replace "$LEGEND_FACTIONS" 3 5
+fi
+
+if $replace_results; then
+    replace "$LEGEND_RESULTS" 8
 fi
