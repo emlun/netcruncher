@@ -3,17 +3,8 @@ path(path,'output')
 
 matches=csvread('processed.csv', 1, 0);
 
-Corp_Player = 1;
-Player_Faction = 2;
-Runner_Player = 3;
-Opponent_Faction = 4;
-Result = 5;
-Turns_Played = 6;
-Win = 7;
-Influence = 8;
-OpInf = 9;
-Corp_score = 10;
-Runner_score = 11;
-Agendas_Nr = 12;
-Corp_Deck_Size = 13;
-Runner_Deck_Size = 14;
+column_enumeration;
+legend_factions;
+legend_results;
+factions_corp;
+factions_runner;
