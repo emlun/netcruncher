@@ -47,3 +47,15 @@ hist(runner_win_rates, BINS);
 title(['Runner win rates (' num2str(MIN_MATCHES) '+ games)']);
 xlabel('Win rate');
 ylabel('Number of players');
+
+
+% Draw point cloud of players' win rates on the corp-rate/runner-rate plane
+figure(fignum+1);
+clf;
+plot(corp_win_rates, runner_win_rates, 'x');
+title(['Players'' win rates (' num2str(MIN_MATCHES) '+ games)']);
+xlabel('Corp win rate');
+ylabel('Runner win rate');
+legend('One player');
+axis equal;
+axis([0 1 0 1]);
