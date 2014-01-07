@@ -6,6 +6,7 @@ LEGEND_FACTIONS="$OUTPUT_DIRECTORY/legend_factions.m"
 LEGEND_RESULTS="$OUTPUT_DIRECTORY/legend_results.m"
 FACTIONS_CORP="$OUTPUT_DIRECTORY/factions_corp.m"
 FACTIONS_RUNNER="$OUTPUT_DIRECTORY/factions_runner.m"
+COLUMN_ENUMERATION="$OUTPUT_DIRECTORY/column_enumeration.m"
 
 if [[ ! -d "$OUTPUT_DIRECTORY" ]]; then
     if ! mkdir "$OUTPUT_DIRECTORY"; then
@@ -68,6 +69,10 @@ done
 if ! $dry_run && ! $overwrite_output; then
     if [[ -f "$FILE" ]]; then
         echo "File $FILE already exists, aborting..."
+        exit 1
+    fi
+    if [[ -f "$COLUMN_ENUMERATION" ]]; then
+        echo "File $COLUMN_ENUMERATION already exists, aborting..."
         exit 1
     fi
     if [[ $replace_factions ]]; then
@@ -205,3 +210,15 @@ if $replace_nulls; then
         sed -i 's#NA#-1#g' "$FILE"
     fi
 fi
+
+echo "Writing column header enumeration..."
+OLDIFS="$IFS"
+IFS=','
+i=1
+rm -f "$COLUMN_ENUMERATION"
+for c in $(head -n1 "$FILE"); do
+    if ! $dry_run; then
+        echo "$c=$i;" | sed 's/\./_/g' >> "$COLUMN_ENUMERATION"
+    fi
+    ((i++))
+done
