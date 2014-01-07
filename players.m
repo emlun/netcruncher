@@ -3,6 +3,7 @@ num_players = max(player_ids);
 
 MIN_MATCHES = 4;
 BINS = 10;
+HEATMAP_BINS = {0:0.05:1, 0:0.05:1};
 
 if 0
 player_win_rates = nan(num_players,1);
@@ -59,3 +60,16 @@ ylabel('Runner win rate');
 legend('One player');
 axis equal;
 axis([0 1 0 1]);
+
+% Draw heatmap of players' win rates on the corp-rate/runner-rate plane
+figure(fignum+2);
+clf;
+colormap(hot);
+imagesc(hist3([corp_win_rates,runner_win_rates], HEATMAP_BINS));
+title(['Heatmap of players'' win rates (' num2str(MIN_MATCHES) '+ games)']);
+xlabel('Corp win rate');
+ylabel('Runner win rate');
+colorbar
+axis image xy
+set(gca, 'XTick', linspace(1,length(HEATMAP_BINS{1}),11), 'XTickLabel', 0:0.1:1);
+set(gca, 'YTick', linspace(1,length(HEATMAP_BINS{2}),11), 'YTickLabel', 0:0.1:1);
