@@ -1,5 +1,7 @@
 read_stats;
 
+FIGURES_DIR='figures';
+
 fignum=10;
 turns;
 

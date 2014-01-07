@@ -9,6 +9,8 @@ xlabel('Number of turns');
 ylabel('Number of games');
 axis([0, maxGames, 0, Inf])
 
+print('-dpng', [FIGURES_DIR '/png/turns.png']);
+
 figure(fignum+1);
 clf;
 
@@ -63,3 +65,5 @@ title('R&D exhaustion');
 xlabel('Number of turns');
 ylabel('Number of games');
 axis([0, maxGames, 0, Inf])
+
+print('-dpng', [FIGURES_DIR '/png/turns-details.png']);

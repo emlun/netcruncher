@@ -46,6 +46,7 @@ title(['Runner win rates (' num2str(MIN_MATCHES) '+ games)']);
 xlabel('Win rate');
 ylabel('Number of players');
 
+print('-dpng', [FIGURES_DIR '/png/winrates.png']);
 
 % Draw point cloud of players' win rates on the corp-rate/runner-rate plane
 figure(fignum+1);
@@ -57,6 +58,8 @@ ylabel('Runner win rate');
 legend('One player');
 axis equal;
 axis([0 1 0 1]);
+
+print('-dpng', [FIGURES_DIR '/png/winrates-cloud.png']);
 
 % Draw heatmap of players' win rates on the corp-rate/runner-rate plane
 figure(fignum+2);
@@ -70,3 +73,5 @@ colorbar
 axis image xy
 set(gca, 'XTick', linspace(1,length(HEATMAP_BINS{1}),11), 'XTickLabel', 0:0.1:1);
 set(gca, 'YTick', linspace(1,length(HEATMAP_BINS{2}),11), 'YTickLabel', 0:0.1:1);
+
+print('-dpng', [FIGURES_DIR '/png/winrates-heatmap.png']);
