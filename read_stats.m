@@ -1,5 +1,7 @@
 % Corp_Player,Player_Faction,Runner_Player,Opponent_Faction,Result,Turns_Played,Win,Influence,OpInf,Corp_score,Runner_score,Agendas.Nr.,Corp.Deck.Size,Runner.Deck.Size
-matches=csvread('output/processed.csv', 1, 0);
+path(path,'output')
+
+matches=csvread('processed.csv', 1, 0);
 
 Corp_Player = 1;
 Player_Faction = 2;
