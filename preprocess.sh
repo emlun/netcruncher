@@ -87,6 +87,9 @@ cp "$1" "$FILE"
 # Args 2-: which columns' values to use for replacements
 replace() {
     legend_file=$1
+    if ! $dry_run; then
+        rm -f $legend_file
+    fi
     shift
     id=0
     OLDIFS="$IFS"
