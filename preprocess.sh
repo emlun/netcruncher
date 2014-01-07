@@ -105,8 +105,8 @@ replace() {
     IFS=$'\n'
     for string in $(for c in "$@"; do tail -n+2 "$FILE" | cut -d , -f "$c"; done | sort -u); do
         echo "Replacing ${string} with ${id} ..."
-        echo $id $string >> "$legend_file"
         if ! $dry_run; then
+            echo $id $string >> "$legend_file"
             sed -i "s#${string}#${id}#g" "$FILE"
         fi
         ((id++))
