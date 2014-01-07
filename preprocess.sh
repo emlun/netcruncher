@@ -1,7 +1,7 @@
 #!/bin/bash
 
 OUTPUT_DIRECTORY=preprocessed
-FILE="$OUTPUT_DIRECTORY/processed.csv"
+FILE="$OUTPUT_DIRECTORY/data.csv"
 LEGEND_FACTIONS="$OUTPUT_DIRECTORY/legend_factions.m"
 LEGEND_RESULTS="$OUTPUT_DIRECTORY/legend_results.m"
 FACTIONS_CORP="$OUTPUT_DIRECTORY/factions_corp.m"
