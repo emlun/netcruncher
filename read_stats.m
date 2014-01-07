@@ -1,4 +1,3 @@
-% Corp_Player,Player_Faction,Runner_Player,Opponent_Faction,Result,Turns_Played,Win,Influence,OpInf,Corp_score,Runner_score,Agendas.Nr.,Corp.Deck.Size,Runner.Deck.Size
 matches=csvread('preprocessed/data.csv', 1, 0);
 
 addpath('preprocessed')
