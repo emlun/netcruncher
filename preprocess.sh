@@ -1,6 +1,6 @@
 #!/bin/bash
 
-OUTPUT_DIRECTORY=output
+OUTPUT_DIRECTORY=preprocessed
 FILE="$OUTPUT_DIRECTORY/processed.csv"
 LEGEND_FACTIONS="$OUTPUT_DIRECTORY/legend_factions.m"
 LEGEND_RESULTS="$OUTPUT_DIRECTORY/legend_results.m"
