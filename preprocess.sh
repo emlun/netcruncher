@@ -88,7 +88,9 @@ if ! $dry_run && ! $overwrite_output; then
 fi
 
 # Copy input file to output file
-cp "$1" "$FILE"
+if ! $dry_run; then
+    cp "$1" "$FILE"
+fi
 
 # Function for replacing occurences of string values from given columns
 # with numeral values
