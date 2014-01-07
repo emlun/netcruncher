@@ -2,10 +2,10 @@
 
 OUTPUT_DIRECTORY=output
 FILE="$OUTPUT_DIRECTORY/processed.csv"
-LEGEND_FACTIONS="$OUTPUT_DIRECTORY/legend-factions.txt"
-LEGEND_RESULTS="$OUTPUT_DIRECTORY/legend-results.txt"
-FACTIONS_CORP="$OUTPUT_DIRECTORY/factions-corp.txt"
-FACTIONS_RUNNER="$OUTPUT_DIRECTORY/factions-runner.txt"
+LEGEND_FACTIONS="$OUTPUT_DIRECTORY/legend_factions.m"
+LEGEND_RESULTS="$OUTPUT_DIRECTORY/legend_results.m"
+FACTIONS_CORP="$OUTPUT_DIRECTORY/factions_corp.m"
+FACTIONS_RUNNER="$OUTPUT_DIRECTORY/factions_runner.m"
 
 if [[ ! -d "$OUTPUT_DIRECTORY" ]]; then
     if ! mkdir "$OUTPUT_DIRECTORY"; then
@@ -108,7 +108,7 @@ replace() {
     for string in $(for c in "$@"; do tail -n+2 "$FILE" | cut -d , -f "$c"; done | sort -u); do
         echo "Replacing ${string} with ${id} ..."
         if ! $dry_run; then
-            echo $id $string >> "$legend_file"
+            echo $(echo $string | sed 's/"//g' | sed 's/ | /_/g' | sed 's/[^a-zA-Z0-9]/_/g')"=$id;" >> "$legend_file"
             sed -i "s#${string}#${id}#g" "$FILE"
         fi
         ((id++))
@@ -173,8 +173,14 @@ fi
 # Replace faction name with numeral ID
 if $replace_factions; then
     replace "$LEGEND_FACTIONS" $(colnum Player_Faction) $(colnum Opponent_Faction)
-    grep -vE "Anarch|Criminal|Shaper" output/legend-factions.txt | cut -d \  -f 1 > "$FACTIONS_CORP"
-    grep -E "Anarch|Criminal|Shaper" output/legend-factions.txt | cut -d \  -f 1 > "$FACTIONS_RUNNER"
+
+    echo "Factions_Corp = [" > "$FACTIONS_CORP"
+    grep -vE "Anarch|Criminal|Shaper" "$LEGEND_FACTIONS" | cut -d =  -f 2 >> "$FACTIONS_CORP"
+    echo "];" >> "$FACTIONS_CORP"
+
+    echo "Factions_Runner = [" > "$FACTIONS_RUNNER"
+    grep -E "Anarch|Criminal|Shaper" "$LEGEND_FACTIONS" | cut -d = -f 2 >> "$FACTIONS_RUNNER"
+    echo "];" >> "$FACTIONS_RUNNER"
 fi
 
 if $replace_results; then
