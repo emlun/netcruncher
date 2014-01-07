@@ -66,6 +66,20 @@ while true; do
     shift || break
 done
 
+if [[ $# < 1 ]] && ! $dry_run; then
+    cat << EOF
+Usage: preprocess.sh [options] input_file
+       preprocess.sh (-N|--dry-run)
+
+Options:
+    -F|--force
+        Overwrite output files if they exist
+    -N|--dry-run
+        Print what would be done, but don't change any files
+EOF
+    exit 1
+fi
+
 if ! $dry_run && ! $overwrite_output; then
     if [[ -f "$FILE" ]]; then
         echo "File $FILE already exists, aborting..."
