@@ -5,12 +5,10 @@ MIN_MATCHES = 4;
 BINS = 10;
 HEATMAP_BINS = {0:0.05:1, 0:0.05:1};
 
-if 0
 player_win_rates = nan(num_players,1);
 corp_win_rates = nan(num_players,1);
 runner_win_rates = nan(num_players,1);
 for player=player_ids'
-    player
     corp_matches = matches(matches(:,Corp_Player)==player,:);
     runner_matches = matches(matches(:,Runner_Player)==player,:);
     num_corp_matches = size(corp_matches,1);
@@ -24,7 +22,6 @@ for player=player_ids'
     if num_corp_matches + num_runner_matches >= MIN_MATCHES
         player_win_rates(player) = (sum(corp_matches(:,Win)) + sum(runner_matches(:,Win)==0))/(num_corp_matches + num_runner_matches);
     end
-end
 end
 
 % Draw histograms of win rates
