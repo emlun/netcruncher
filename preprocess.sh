@@ -4,6 +4,8 @@ OUTPUT_DIRECTORY=output
 FILE="$OUTPUT_DIRECTORY/processed.csv"
 LEGEND_FACTIONS="$OUTPUT_DIRECTORY/legend-factions.txt"
 LEGEND_RESULTS="$OUTPUT_DIRECTORY/legend-results.txt"
+FACTIONS_CORP="$OUTPUT_DIRECTORY/factions-corp.txt"
+FACTIONS_RUNNER="$OUTPUT_DIRECTORY/factions-runner.txt"
 
 if [[ ! -d "$OUTPUT_DIRECTORY" ]]; then
     if ! mkdir "$OUTPUT_DIRECTORY"; then
@@ -68,9 +70,16 @@ if ! $dry_run && ! $overwrite_output; then
         echo "File $FILE already exists, aborting..."
         exit 1
     fi
-    if [[ $replace_factions && -f "$LEGEND_FACTIONS" ]]; then
-        echo "File $LEGEND_FACTIONS already exists, aborting..."
-        exit 1
+    if [[ $replace_factions ]]; then
+        legend_files=("$LEGEND_FACTIONS"
+                      "$FACTIONS_CORP"
+                      "$FACTIONS_RUNNER")
+        for f in "${legend_files[@]}"; do
+            if [[ -f "$f" ]]; then
+                echo "File $f already exists, aborting..."
+                exit 1
+            fi
+        done
     fi
     if [[ $replace_results && -f "$LEGEND_RESULTS" ]]; then
         echo "File $LEGEND_RESULTS already exists, aborting..."
@@ -162,6 +171,8 @@ fi
 # Replace faction name with numeral ID
 if $replace_factions; then
     replace "$LEGEND_FACTIONS" $(colnum Player_Faction) $(colnum Opponent_Faction)
+    grep -vE "Anarch|Criminal|Shaper" output/legend-factions.txt | cut -d \  -f 1 > "$FACTIONS_CORP"
+    grep -E "Anarch|Criminal|Shaper" output/legend-factions.txt | cut -d \  -f 1 > "$FACTIONS_RUNNER"
 fi
 
 if $replace_results; then
