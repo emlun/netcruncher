@@ -244,7 +244,7 @@ if $replace_factions; then
                 ;;
         esac
 
-        rm "$src"
+        $dry_run || rm "$src"
     }
     make_metadata Corp "$FACTIONS_CORP"
     make_metadata Runner "$FACTIONS_RUNNER"
@@ -271,7 +271,7 @@ echo "Writing column header enumeration..."
 OLDIFS="$IFS"
 IFS=','
 i=1
-rm -f "$COLUMN_ENUMERATION"
+$dry_run || rm -f "$COLUMN_ENUMERATION"
 for c in $(head -n1 "$FILE"); do
     if ! $dry_run; then
         echo "$c=$i;" | sed 's/\./_/g' >> "$COLUMN_ENUMERATION"
