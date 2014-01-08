@@ -204,6 +204,9 @@ if $replace_factions; then
             src=$(mktemp)
             cp "$output" "$src"
 
+            # Add ID enumeration to output
+            echo "Factions_${side} = 1:$(wc -l $src | cut -d \  -f 1);" >> "$output"
+
             # Make ID labels
             echo "Faction_Labels_${side} = {" >> "$output"
             cut -d = -f 1 "$src" | sed 's/Haas_/Haas-/g' | sed 's/Weyland_/Weyland /' | sed 's/^[^_]*_//' | sed 's/_/ /g' | sed "s/.*/'\0';/" >> "$output"
@@ -221,9 +224,6 @@ if $replace_factions; then
                 | sed "s/.*shaper.*/SHAPER_COLOR;/i" \
                 >> "$output"
             echo '];' >> "$output"
-
-            # Add ID enumeration to output
-            echo "Factions_${side} = 1:$(wc -l $src | cut -d \  -f 1);" >> "$output"
 
             # Add faction loyalties to output
             make_faction_loyalty() {
