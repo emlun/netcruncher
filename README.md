@@ -10,6 +10,8 @@ Prerequisites
 - bash with standard utilities like grep and sed
 - MATLAB or GNU Octave (Octave support is not completely supported at
   this time, but I hope to make it fully compatible eventually)
+- Octave extra packages:
+  - statistics
 
 At this time I have no plans to port the bash script to Windows, but
 feel to contribute a port. Using cygwin should work fine otherwise.
