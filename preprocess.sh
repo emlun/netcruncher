@@ -155,7 +155,8 @@ colnum() {
 
 nuke_column() {
     col=$1
-    tmpfile=$(mktemp) && cut -d , -f -$(($col-1)),$(($col+1))- "$FILE" > "$tmpfile" && cat "$tmpfile" > "$FILE" && rm "$tmpfile"
+    echo "Nuking column ${col}..."
+    $dry_run || tmpfile=$(mktemp) && cut -d , -f -$(($col-1)),$(($col+1))- "$FILE" > "$tmpfile" && cat "$tmpfile" > "$FILE" && rm "$tmpfile"
 }
 
 if $nuke_line_numbers; then
@@ -167,23 +168,19 @@ fi
 
 if $nuke_timestamps; then
     echo "Nuking timestamps..."
-    if ! $dry_run; then
-        for header in GameStart Duration; do
-            c=$(colnum "$header")
-            if [[ $? ]]; then
-                nuke_column "$c"
-            fi
-        done
-    fi
+    for header in GameStart Duration; do
+        c=$(colnum "$header")
+        if [[ $? ]]; then
+            nuke_column "$c"
+        fi
+    done
 fi
 
 if $nuke_versions; then
     echo "Nuking versions..."
-    if ! $dry_run; then
-        c=$(colnum Version)
-        if [[ $? ]]; then
-            nuke_column "$c"
-        fi
+    c=$(colnum Version)
+    if [[ $? ]]; then
+        nuke_column "$c"
     fi
 fi
 
