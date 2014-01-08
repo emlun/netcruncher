@@ -2,7 +2,6 @@
 
 OUTPUT_DIRECTORY=preprocessed
 FILE="$OUTPUT_DIRECTORY/data.csv"
-LEGEND_FACTIONS="$OUTPUT_DIRECTORY/legend_factions.m"
 LEGEND_RESULTS="$OUTPUT_DIRECTORY/legend_results.m"
 FACTIONS_CORP="$OUTPUT_DIRECTORY/factions_corp.m"
 FACTIONS_RUNNER="$OUTPUT_DIRECTORY/factions_runner.m"
@@ -90,8 +89,7 @@ if ! $dry_run && ! $overwrite_output; then
         exit 1
     fi
     if [[ $replace_factions ]]; then
-        legend_files=("$LEGEND_FACTIONS"
-                      "$FACTIONS_CORP"
+        legend_files=("$FACTIONS_CORP"
                       "$FACTIONS_RUNNER")
         for f in "${legend_files[@]}"; do
             if [[ -f "$f" ]]; then
@@ -196,15 +194,28 @@ if $replace_factions; then
         sed -i 's/"Shaper | Rielle ""Kit"" Peddler"/Shaper | Rielle "Kit" Peddler/g' "$FILE"
     fi
 
-    replace "$LEGEND_FACTIONS" $(colnum Player_Faction) $(colnum Opponent_Faction)
+    replace "$FACTIONS_CORP" $(colnum Player_Faction)
+    replace "$FACTIONS_RUNNER" $(colnum Opponent_Faction)
 
-    echo "Factions_Corp = [" > "$FACTIONS_CORP"
-    grep -vE "Anarch|Criminal|Shaper" "$LEGEND_FACTIONS" | cut -d =  -f 2 >> "$FACTIONS_CORP"
-    echo "];" >> "$FACTIONS_CORP"
+    if ! $dry_run; then
+        make_metadata() {
+            # Make ID labels
+            side=$1
+            file=$2
+            labels_file=$(mktemp)
+            echo "Faction_Labels_${side} = {" > "$labels_file"
+            cut -d = -f 1 "$file" | sed 's/Haas_/Haas-/g' | sed 's/Weyland_/Weyland /' | sed 's/^[^_]*_//' | sed 's/_/ /g' | sed "s/.*/'\0';/" >> "$labels_file"
+            echo '};' >> "$labels_file"
 
-    echo "Factions_Runner = [" > "$FACTIONS_RUNNER"
-    grep -E "Anarch|Criminal|Shaper" "$LEGEND_FACTIONS" | cut -d = -f 2 >> "$FACTIONS_RUNNER"
-    echo "];" >> "$FACTIONS_RUNNER"
+            # Add ID enumeration to file
+            echo "Factions_${side} = 1:$(wc -l $file | cut -d \  -f 1);" >> "$file"
+            # Add labels to file
+            cat "$labels_file" >> "$file"
+            rm "$labels_file"
+        }
+        make_metadata Corp "$FACTIONS_CORP"
+        make_metadata Runner "$FACTIONS_RUNNER"
+    fi
 fi
 
 if $replace_results; then
