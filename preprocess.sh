@@ -191,6 +191,11 @@ fi
 
 # Replace faction name with numeral ID
 if $replace_factions; then
+    echo "Fixing Kit..."
+    if ! $dry_run; then
+        sed -i 's/"Shaper | Rielle ""Kit"" Peddler"/Shaper | Rielle "Kit" Peddler/g' "$FILE"
+    fi
+
     replace "$LEGEND_FACTIONS" $(colnum Player_Faction) $(colnum Opponent_Faction)
 
     echo "Factions_Corp = [" > "$FACTIONS_CORP"
