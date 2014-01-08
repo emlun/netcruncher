@@ -65,10 +65,9 @@ while true; do
     shift || break
 done
 
-if [[ $# < 1 ]] && ! $dry_run; then
+if [[ $# < 1 ]] ; then
     cat << EOF
 Usage: preprocess.sh [options] input_file
-       preprocess.sh (-N|--dry-run)
 
 Options:
     -F|--force
@@ -105,7 +104,9 @@ if ! $dry_run && ! $overwrite_output; then
 fi
 
 # Copy input file to output file
-if ! $dry_run; then
+if $dry_run; then
+    FILE="$1"
+else
     cp "$1" "$FILE"
 fi
 
