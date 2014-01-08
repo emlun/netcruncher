@@ -1,8 +1,11 @@
 netcruncher
 ===========
 
-Scripts for number crunching on dbzer0's Android: Netrunner OCTGN
-statistics
+Fully automated analysis of Android: Netrunner statistics
+
+This project is home to scripts for number crunching on dbzer0's
+Android: Netrunner OCTGN statistics. The vision is to allow fully
+automated analysis of said statistics.
 
 Prerequisites
 -------------
