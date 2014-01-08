@@ -207,11 +207,28 @@ if $replace_factions; then
             cut -d = -f 1 "$file" | sed 's/Haas_/Haas-/g' | sed 's/Weyland_/Weyland /' | sed 's/^[^_]*_//' | sed 's/_/ /g' | sed "s/.*/'\0';/" >> "$labels_file"
             echo '};' >> "$labels_file"
 
+            # Make colormaps for coloring graphs
+            colors_file=$(mktemp)
+            echo "Colormap_${side} = [" > "$colors_file"
+            cut -d = -f 1 "$file" \
+                | sed "s/.*haas_bioroid.*/HAAS_BIOROID_COLOR;/i" \
+                | sed "s/.*jinteki.*/JINTEKI_COLOR;/i" \
+                | sed "s/.*nbn.*/NBN_COLOR;/i" \
+                | sed "s/.*weyland_consortium.*/WEYLAND_COLOR;/i" \
+                | sed "s/.*anarch.*/ANARCH_COLOR;/i" \
+                | sed "s/.*criminal.*/CRIMINAL_COLOR;/i" \
+                | sed "s/.*shaper.*/SHAPER_COLOR;/i" \
+                >> "$colors_file"
+            echo '];' >> "$colors_file"
+
             # Add ID enumeration to file
             echo "Factions_${side} = 1:$(wc -l $file | cut -d \  -f 1);" >> "$file"
             # Add labels to file
             cat "$labels_file" >> "$file"
             rm "$labels_file"
+            # Add colormaps to file
+            cat "$colors_file" >> "$file"
+            rm "$colors_file"
         }
         make_metadata Corp "$FACTIONS_CORP"
         make_metadata Runner "$FACTIONS_RUNNER"
