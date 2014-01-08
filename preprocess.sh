@@ -186,6 +186,7 @@ if $replace_factions; then
     echo "Fixing Kit..."
     $dry_run || sed -i 's/"Shaper | Rielle ""Kit"" Peddler"/Shaper | Rielle "Kit" Peddler/g' "$FILE"
 
+    echo "Replacing identity names with integers..."
     replace "$FACTIONS_CORP" $(colnum Player_Faction)
     replace "$FACTIONS_RUNNER" $(colnum Opponent_Faction)
 
