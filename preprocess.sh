@@ -115,9 +115,7 @@ fi
 # Args 2-: which columns' values to use for replacements
 replace() {
     legend_file=$1
-    if ! $dry_run; then
-        rm -f $legend_file
-    fi
+    $dry_run || rm -f $legend_file
     shift
     id=1
     OLDIFS="$IFS"
@@ -156,14 +154,12 @@ colnum() {
 nuke_column() {
     col=$1
     echo "Nuking column ${col}..."
-    $dry_run || tmpfile=$(mktemp) && cut -d , -f -$(($col-1)),$(($col+1))- "$FILE" > "$tmpfile" && cat "$tmpfile" > "$FILE" && rm "$tmpfile"
+    $dry_run || (tmpfile=$(mktemp) && cut -d , -f -$(($col-1)),$(($col+1))- "$FILE" > "$tmpfile" && cat "$tmpfile" > "$FILE" && rm "$tmpfile")
 }
 
 if $nuke_line_numbers; then
     echo "Nuking line numbers..."
-    if ! $dry_run; then
-        tmpfile=$(mktemp) && cut -d , -f 2- "$FILE" > "$tmpfile" && cat "$tmpfile" > "$FILE" && rm "$tmpfile"
-    fi
+    $dry_run || (tmpfile=$(mktemp) && cut -d , -f 2- "$FILE" > "$tmpfile" && cat "$tmpfile" > "$FILE" && rm "$tmpfile")
 fi
 
 if $nuke_timestamps; then
@@ -187,9 +183,7 @@ fi
 # Replace faction name with numeral ID
 if $replace_factions; then
     echo "Fixing Kit..."
-    if ! $dry_run; then
-        sed -i 's/"Shaper | Rielle ""Kit"" Peddler"/Shaper | Rielle "Kit" Peddler/g' "$FILE"
-    fi
+    $dry_run || sed -i 's/"Shaper | Rielle ""Kit"" Peddler"/Shaper | Rielle "Kit" Peddler/g' "$FILE"
 
     replace "$FACTIONS_CORP" $(colnum Player_Faction)
     replace "$FACTIONS_RUNNER" $(colnum Opponent_Faction)
@@ -261,21 +255,15 @@ fi
 
 if $replace_booleans; then
     echo "Replacing false with 0 (case insensitive)..."
-    if ! $dry_run; then
-        sed -i 's#false#0#gi' "$FILE"
-    fi
+    $dry_run || sed -i 's#false#0#gi' "$FILE"
 
     echo "Replacing true with 1 (case insensitive)..."
-    if ! $dry_run; then
-        sed -i 's#true#1#gi' "$FILE"
-    fi
+    $dry_run || sed -i 's#true#1#gi' "$FILE"
 fi
 
 if $replace_nulls; then
     echo "Replacing NA with -1 ..."
-    if ! $dry_run; then
-        sed -i 's#NA#-1#g' "$FILE"
-    fi
+    $dry_run || sed -i 's#NA#-1#g' "$FILE"
 fi
 
 echo "Writing column header enumeration..."
