@@ -1,0 +1,2 @@
+pkg load statistics
+crunch

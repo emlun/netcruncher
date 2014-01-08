@@ -1,4 +1,4 @@
 #!/bin/bash
 
 ./preprocess.sh $@
-matlab -nosplash -nodesktop -r "run('crunch'); exit;"
+matlab -nosplash -nodesktop -r "run('run_matlab'); exit;"

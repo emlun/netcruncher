@@ -1,4 +1,4 @@
 #!/bin/bash
 
 ./preprocess.sh $@
-octave crunch.m
+octave run_octave.m
