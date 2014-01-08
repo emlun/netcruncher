@@ -229,6 +229,23 @@ if $replace_factions; then
             # Add colormaps to file
             cat "$colors_file" >> "$file"
             rm "$colors_file"
+
+            # Add faction loyalties to file
+            make_faction_loyalty() {
+                for faction in "$@"; do
+                    echo "Factions_${faction} = [" >> "$file"
+                    grep -Ei ".*${faction}.*=[[:space:]]*[[:digit:]]+" "$file" | cut -d = -f 2 >> "$file"
+                    echo "];" >> "$file"
+                done
+            }
+            case "$side" in
+                "Corp")
+                    make_faction_loyalty "Haas_Bioroid" "Jinteki" "NBN" "Weyland"
+                    ;;
+                "Runner")
+                    make_faction_loyalty "Anarch" "Criminal" "Shaper"
+                    ;;
+            esac
         }
         make_metadata Corp "$FACTIONS_CORP"
         make_metadata Runner "$FACTIONS_RUNNER"
