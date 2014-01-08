@@ -14,7 +14,10 @@ Prerequisites
 - MATLAB or GNU Octave (Octave support is not completely supported at
   this time, but I hope to make it fully compatible eventually)
 - Octave extra packages:
-  - statistics
+  - statistics (available [here][octave-statistics], also check your
+    distro's repos)
+
+[octave-statistics]: http://octave.sourceforge.net/statistics/index.html
 
 At this time I have no plans to port the bash script to Windows, but
 feel to contribute a port. Using cygwin should work fine otherwise.
