@@ -197,22 +197,28 @@ if $replace_factions; then
     replace "$FACTIONS_CORP" $(colnum Player_Faction)
     replace "$FACTIONS_RUNNER" $(colnum Opponent_Faction)
 
-    if ! $dry_run; then
-        make_metadata() {
-            side=$1
-            output=$2
+    make_metadata() {
+        side=$1
+        output=$2
+        if $dry_run; then
+            src="$output"
+        else
             src=$(mktemp)
             cp "$output" "$src"
+        fi
 
-            # Add ID enumeration to output
-            echo "Factions_${side} = 1:$(wc -l $src | cut -d \  -f 1);" >> "$output"
+        echo "Making enumeration of ${side} identities..."
+        $dry_run || echo "Factions_${side} = 1:$(wc -l $src | cut -d \  -f 1);" >> "$output"
 
-            # Make ID labels
+        echo "Making identity name labels..."
+        if ! $dry_run; then
             echo "Faction_Labels_${side} = {" >> "$output"
             cut -d = -f 1 "$src" | sed 's/Haas_/Haas-/g' | sed 's/Weyland_/Weyland /' | sed 's/^[^_]*_//' | sed 's/_/ /g' | sed "s/.*/'\0';/" >> "$output"
             echo '};' >> "$output"
+        fi
 
-            # Make colormaps for coloring graphs
+        echo "Making ${side} colormap for coloring graphs..."
+        if ! $dry_run; then
             echo "Colormap_${side} = [" >> "$output"
             cut -d = -f 1 "$src" \
                 | sed "s/.*haas_bioroid.*/HAAS_BIOROID_COLOR;/i" \
@@ -224,29 +230,32 @@ if $replace_factions; then
                 | sed "s/.*shaper.*/SHAPER_COLOR;/i" \
                 >> "$output"
             echo '];' >> "$output"
+        fi
 
-            # Add faction loyalties to output
-            make_faction_loyalty() {
-                for faction in "$@"; do
+        # Add faction loyalties to output
+        make_faction_loyalty() {
+            for faction in "$@"; do
+                echo "Making list of ${faction} identities..."
+                if ! $dry_run; then
                     echo "Factions_${faction} = [" >> "$output"
                     grep -Ei ".*${faction}.*=" "$src" | cut -d = -f 2 >> "$output"
                     echo "];" >> "$output"
-                done
-            }
-            case "$side" in
-                "Corp")
-                    make_faction_loyalty "Haas_Bioroid" "Jinteki" "NBN" "Weyland"
-                    ;;
-                "Runner")
-                    make_faction_loyalty "Anarch" "Criminal" "Shaper"
-                    ;;
-            esac
-
-            rm "$src"
+                fi
+            done
         }
-        make_metadata Corp "$FACTIONS_CORP"
-        make_metadata Runner "$FACTIONS_RUNNER"
-    fi
+        case "$side" in
+            "Corp")
+                make_faction_loyalty "Haas_Bioroid" "Jinteki" "NBN" "Weyland"
+                ;;
+            "Runner")
+                make_faction_loyalty "Anarch" "Criminal" "Shaper"
+                ;;
+        esac
+
+        rm "$src"
+    }
+    make_metadata Corp "$FACTIONS_CORP"
+    make_metadata Runner "$FACTIONS_RUNNER"
 fi
 
 if $replace_results; then
