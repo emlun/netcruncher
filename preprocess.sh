@@ -199,18 +199,19 @@ if $replace_factions; then
 
     if ! $dry_run; then
         make_metadata() {
-            # Make ID labels
             side=$1
             output=$2
-            labels_file=$(mktemp)
-            echo "Faction_Labels_${side} = {" > "$labels_file"
-            cut -d = -f 1 "$output" | sed 's/Haas_/Haas-/g' | sed 's/Weyland_/Weyland /' | sed 's/^[^_]*_//' | sed 's/_/ /g' | sed "s/.*/'\0';/" >> "$labels_file"
-            echo '};' >> "$labels_file"
+            src=$(mktemp)
+            cp "$output" "$src"
+
+            # Make ID labels
+            echo "Faction_Labels_${side} = {" >> "$output"
+            cut -d = -f 1 "$src" | sed 's/Haas_/Haas-/g' | sed 's/Weyland_/Weyland /' | sed 's/^[^_]*_//' | sed 's/_/ /g' | sed "s/.*/'\0';/" >> "$output"
+            echo '};' >> "$output"
 
             # Make colormaps for coloring graphs
-            colors_file=$(mktemp)
-            echo "Colormap_${side} = [" > "$colors_file"
-            cut -d = -f 1 "$output" \
+            echo "Colormap_${side} = [" >> "$output"
+            cut -d = -f 1 "$src" \
                 | sed "s/.*haas_bioroid.*/HAAS_BIOROID_COLOR;/i" \
                 | sed "s/.*jinteki.*/JINTEKI_COLOR;/i" \
                 | sed "s/.*nbn.*/NBN_COLOR;/i" \
@@ -218,23 +219,17 @@ if $replace_factions; then
                 | sed "s/.*anarch.*/ANARCH_COLOR;/i" \
                 | sed "s/.*criminal.*/CRIMINAL_COLOR;/i" \
                 | sed "s/.*shaper.*/SHAPER_COLOR;/i" \
-                >> "$colors_file"
-            echo '];' >> "$colors_file"
+                >> "$output"
+            echo '];' >> "$output"
 
             # Add ID enumeration to output
-            echo "Factions_${side} = 1:$(wc -l $output | cut -d \  -f 1);" >> "$output"
-            # Add labels to output
-            cat "$labels_file" >> "$output"
-            rm "$labels_file"
-            # Add colormaps to output
-            cat "$colors_file" >> "$output"
-            rm "$colors_file"
+            echo "Factions_${side} = 1:$(wc -l $src | cut -d \  -f 1);" >> "$output"
 
             # Add faction loyalties to output
             make_faction_loyalty() {
                 for faction in "$@"; do
                     echo "Factions_${faction} = [" >> "$output"
-                    grep -Ei ".*${faction}.*=[[:space:]]*[[:digit:]]+" "$output" | cut -d = -f 2 >> "$output"
+                    grep -Ei ".*${faction}.*=" "$src" | cut -d = -f 2 >> "$output"
                     echo "];" >> "$output"
                 done
             }
@@ -246,6 +241,8 @@ if $replace_factions; then
                     make_faction_loyalty "Anarch" "Criminal" "Shaper"
                     ;;
             esac
+
+            rm "$src"
         }
         make_metadata Corp "$FACTIONS_CORP"
         make_metadata Runner "$FACTIONS_RUNNER"
