@@ -11,8 +11,8 @@ Prerequisites
 -------------
 
 - bash with standard utilities like grep and sed
-- MATLAB or GNU Octave (Octave support is not completely supported at
-  this time, but I hope to make it fully compatible eventually)
+- MATLAB or GNU Octave (Octave not fully supported at this time, but I
+  hope to make it so eventually)
 - Octave extra packages:
   - statistics (available [here][octave-statistics], also check your
     distro's repos)
