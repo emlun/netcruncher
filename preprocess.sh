@@ -200,7 +200,7 @@ if $replace_factions; then
             cp "$output" "$src"
         fi
 
-        echo "Making enumeration of ${side} identities..."
+        echo "Making list of ${side} identity integers..."
         $dry_run || echo "Factions_${side} = 1:$(wc -l $src | cut -d \  -f 1);" >> "$output"
 
         echo "Making identity name labels..."
