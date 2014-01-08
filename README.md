@@ -36,10 +36,10 @@ integers correspond to which integers.
 
 If you pass the script the `-N|--dry-run` option, it will output what
 it would do, but not change any files. By default, the script aborts
-if any of the output files already exist. This can be overriden with
-`-F|--force`. The script also accepts some other options that control
-what it will do, these are undocumented but the script source code
-should suffice as description of what they do.
+if the output directory. This can be overriden with `-F|--force`. The
+script also accepts some other options that control what it will do,
+these are undocumented but the script source code should suffice as
+description of what they do.
 
 
 Now we're ready to get crunching! Fire up MATLAB or Octave and run the
