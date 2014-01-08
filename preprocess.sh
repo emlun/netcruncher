@@ -137,19 +137,18 @@ replace() {
 colnum() {
     sought_header=$1
     i=1
-    while true; do
-        header=$(head -n1 "$FILE" | cut -d , -f $i 2>/dev/null)
-        if [ -n "$header" ]; then
-            if [[ "$header" == $sought_header ]]; then
-                echo $i
-                return 0
-            fi
-            ((i++))
-        else
-            return 1
-            break
+    OLDIFS="$IFS"
+    IFS=','
+    for header in $(head -n1 "$FILE"); do
+        if [[ "$header" == $sought_header ]]; then
+            echo $i
+            IFS="$OLDIFS"
+            return 0
         fi
+        ((i++))
     done
+    IFS="$OLDIFS"
+    return 1
 }
 
 nuke_column() {
