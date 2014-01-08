@@ -46,7 +46,8 @@ memorizing which integers correspond to which column numbers, match
 results, identities and the like (Actually, it runs all the scripts in
 the `preprocessed/` directory. Take a look at them to see which
 variables you get.). Try running some of the other `*.m` scripts as
-well, and start experimenting on your own!
+well, or run `crunch.m` to run them all in sequence, and then start
+experimenting on your own!
 
 
 Contributing
