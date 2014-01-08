@@ -121,7 +121,7 @@ replace() {
         rm -f $legend_file
     fi
     shift
-    id=0
+    id=1
     OLDIFS="$IFS"
     IFS=$'\n'
     for string in $(for c in "$@"; do tail -n+2 "$FILE" | cut -d , -f "$c"; done | sort -u); do
