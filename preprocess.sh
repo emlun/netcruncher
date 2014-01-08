@@ -7,13 +7,6 @@ FACTIONS_CORP="$OUTPUT_DIRECTORY/factions_corp.m"
 FACTIONS_RUNNER="$OUTPUT_DIRECTORY/factions_runner.m"
 COLUMN_ENUMERATION="$OUTPUT_DIRECTORY/column_enumeration.m"
 
-if [[ ! -d "$OUTPUT_DIRECTORY" ]]; then
-    if ! mkdir "$OUTPUT_DIRECTORY"; then
-        echo "Could not create output directory $OUTPUT_DIRECTORY, aborting..."
-        exit 1
-    fi
-fi
-
 replace_booleans=true
 nuke_timestamps=true
 replace_factions=true
@@ -78,30 +71,18 @@ EOF
     exit 1
 fi
 
-if ! $dry_run && ! $overwrite_output; then
-    if [[ -f "$FILE" ]]; then
-        echo "File $FILE already exists, aborting..."
+if [[ -d "$OUTPUT_DIRECTORY" ]]; then
+    if ! $dry_run && ! $overwrite_output; then
+        echo "Directory ${OUTPUT_DIRECTORY} already exists, aborting..."
         exit 1
     fi
-    if [[ -f "$COLUMN_ENUMERATION" ]]; then
-        echo "File $COLUMN_ENUMERATION already exists, aborting..."
-        exit 1
-    fi
-    if [[ $replace_factions ]]; then
-        legend_files=("$FACTIONS_CORP"
-                      "$FACTIONS_RUNNER")
-        for f in "${legend_files[@]}"; do
-            if [[ -f "$f" ]]; then
-                echo "File $f already exists, aborting..."
-                exit 1
-            fi
-        done
-    fi
-    if [[ $replace_results && -f "$LEGEND_RESULTS" ]]; then
-        echo "File $LEGEND_RESULTS already exists, aborting..."
+else
+    if ! mkdir "$OUTPUT_DIRECTORY"; then
+        echo "Could not create output directory $OUTPUT_DIRECTORY, aborting..."
         exit 1
     fi
 fi
+
 
 # Copy input file to output file
 if $dry_run; then
