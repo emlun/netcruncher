@@ -201,16 +201,16 @@ if $replace_factions; then
         make_metadata() {
             # Make ID labels
             side=$1
-            file=$2
+            output=$2
             labels_file=$(mktemp)
             echo "Faction_Labels_${side} = {" > "$labels_file"
-            cut -d = -f 1 "$file" | sed 's/Haas_/Haas-/g' | sed 's/Weyland_/Weyland /' | sed 's/^[^_]*_//' | sed 's/_/ /g' | sed "s/.*/'\0';/" >> "$labels_file"
+            cut -d = -f 1 "$output" | sed 's/Haas_/Haas-/g' | sed 's/Weyland_/Weyland /' | sed 's/^[^_]*_//' | sed 's/_/ /g' | sed "s/.*/'\0';/" >> "$labels_file"
             echo '};' >> "$labels_file"
 
             # Make colormaps for coloring graphs
             colors_file=$(mktemp)
             echo "Colormap_${side} = [" > "$colors_file"
-            cut -d = -f 1 "$file" \
+            cut -d = -f 1 "$output" \
                 | sed "s/.*haas_bioroid.*/HAAS_BIOROID_COLOR;/i" \
                 | sed "s/.*jinteki.*/JINTEKI_COLOR;/i" \
                 | sed "s/.*nbn.*/NBN_COLOR;/i" \
@@ -221,21 +221,21 @@ if $replace_factions; then
                 >> "$colors_file"
             echo '];' >> "$colors_file"
 
-            # Add ID enumeration to file
-            echo "Factions_${side} = 1:$(wc -l $file | cut -d \  -f 1);" >> "$file"
-            # Add labels to file
-            cat "$labels_file" >> "$file"
+            # Add ID enumeration to output
+            echo "Factions_${side} = 1:$(wc -l $output | cut -d \  -f 1);" >> "$output"
+            # Add labels to output
+            cat "$labels_file" >> "$output"
             rm "$labels_file"
-            # Add colormaps to file
-            cat "$colors_file" >> "$file"
+            # Add colormaps to output
+            cat "$colors_file" >> "$output"
             rm "$colors_file"
 
-            # Add faction loyalties to file
+            # Add faction loyalties to output
             make_faction_loyalty() {
                 for faction in "$@"; do
-                    echo "Factions_${faction} = [" >> "$file"
-                    grep -Ei ".*${faction}.*=[[:space:]]*[[:digit:]]+" "$file" | cut -d = -f 2 >> "$file"
-                    echo "];" >> "$file"
+                    echo "Factions_${faction} = [" >> "$output"
+                    grep -Ei ".*${faction}.*=[[:space:]]*[[:digit:]]+" "$output" | cut -d = -f 2 >> "$output"
+                    echo "];" >> "$output"
                 done
             }
             case "$side" in
