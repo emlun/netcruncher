@@ -5,7 +5,7 @@ Scripts for number crunching on dbzer0's Android: Netrunner OCTGN
 statistics
 
 Prerequisites
-=============
+-------------
 
 - bash with standard utilities like grep and sed
 - MATLAB or GNU Octave (Octave support is not completely supported at
@@ -17,7 +17,7 @@ At this time I have no plans to port the bash script to Windows, but
 feel to contribute a port. Using cygwin should work fine otherwise.
 
 Usage
-=====
+-----
 
 First, run the `preprocess.sh` script. It expects a single positional
 parameter which is a statistics file released by dbzer0:
@@ -51,7 +51,7 @@ experimenting on your own!
 
 
 Contributing
-============
+------------
 
 Send me a pull request and I'll probably merge it if it looks good! :D
 
