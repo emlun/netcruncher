@@ -127,7 +127,6 @@ imagesc(matchup_win_rates_nonans', [0, 1]);
 % This colormap is a linear red-black-blue gradient
 title(['Corp - Runner win rate % in specific matchups (' num2str(MIN_MATCHES) '+ matches)']);
 set(gca, 'XTick', Factions_Corp, 'XTickLabel', Faction_Labels_Corp, 'YTick', Factions_Runner, 'YTickLabel', Faction_Labels_Runner);
-colorbar;
 
 for corp_id=Factions_Corp
     for runner_id=Factions_Runner
