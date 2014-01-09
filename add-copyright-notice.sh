@@ -17,7 +17,7 @@
 # along with Netcruncher.  If not, see <http://www.gnu.org/licenses/>.
 
 print_copyright() {
-cat << EOF
+    cat << EOF
 Copyright 2014 Emil Lundberg
 
 This file is part of Netcruncher.
