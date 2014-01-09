@@ -37,6 +37,13 @@ along with Netcruncher.  If not, see <http://www.gnu.org/licenses/>.
 EOF
 }
 
+if [[ $# < 1 ]]; then
+    cat << EOF
+Usage: $(basename $0) FILES...
+EOF
+    exit 1
+fi
+
 for file in "$@"; do
     # Make tmp file for building output incrementally
     tmpfile=$(mktemp tmp.$(basename $0).XXXXXXXXXX)
