@@ -1,4 +1,4 @@
-netcruncher
+Netcruncher
 ===========
 
 Fully automated analysis of Android: Netrunner statistics
