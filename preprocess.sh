@@ -60,7 +60,7 @@ done
 
 if [[ $# < 1 ]] ; then
     cat << EOF
-Usage: preprocess.sh [options] input_file
+Usage: $(basename $0) [options] input_file
 
 Options:
     -F|--force
