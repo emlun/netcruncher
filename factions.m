@@ -39,3 +39,57 @@ h=pie(runner_faction_match_counts);
 title('Runner identity prevalences');
 align_pie_labels(h, Faction_Labels_Runner);
 colormap(Colormap_Runner);
+
+%% Identities' win rates
+
+corp_id_win_rates = zeros(length(Factions_Corp),1);
+for corp_id=Factions_Corp
+    win_corp_id = matches(matches(:,Player_Faction)==corp_id,Win);
+    corp_id_win_rates(corp_id) = sum(win_corp_id)/size(win_corp_id,1);
+end
+
+runner_id_win_rates = zeros(length(Factions_Runner),1);
+for runner_id=Factions_Runner
+    win_runner_id = matches(matches(:,Player_Faction)==runner_id,Win);
+    runner_id_win_rates(runner_id) = sum(win_runner_id==0)/size(win_runner_id,1);
+end
+
+figure(fignum+2);
+clf;
+
+subplot(1,2,1);
+hold on;
+plot([0.5,0.5],[0.5,Factions_Corp(end)+0.5],'r')
+
+h=barh(Factions_Haas_Bioroid, corp_id_win_rates(Factions_Haas_Bioroid));
+set(h, 'FaceColor', HAAS_BIOROID_COLOR);
+h=barh(Factions_Jinteki, corp_id_win_rates(Factions_Jinteki));
+set(h, 'FaceColor', JINTEKI_COLOR);
+h=barh(Factions_NBN, corp_id_win_rates(Factions_NBN));
+set(h, 'FaceColor', NBN_COLOR);
+h=barh(Factions_Weyland, corp_id_win_rates(Factions_Weyland));
+set(h, 'FaceColor', WEYLAND_COLOR);
+
+title('Corp identities'' win rates');
+xlabel('Win rate');
+set(gca, 'YTickLabel', Faction_Labels_Corp);
+axis([0, 1, -Inf, Inf]);
+axis ij
+
+subplot(1,2,2);
+hold on;
+barh(runner_id_win_rates);
+plot([0.5,0.5],[0.5,Factions_Runner(end)+0.5],'r')
+
+h=barh(Factions_Anarch, runner_id_win_rates(Factions_Anarch));
+set(h, 'FaceColor', ANARCH_COLOR);
+h=barh(Factions_Criminal, runner_id_win_rates(Factions_Criminal));
+set(h, 'FaceColor', CRIMINAL_COLOR);
+h=barh(Factions_Shaper, runner_id_win_rates(Factions_Shaper));
+set(h, 'FaceColor', SHAPER_COLOR);
+
+title('Runner identities'' win rates');
+xlabel('Win rate');
+set(gca, 'YTickLabel', Faction_Labels_Runner);
+axis([0, 1, -Inf, Inf]);
+axis ij
