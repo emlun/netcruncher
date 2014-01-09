@@ -14,11 +14,11 @@
 %
 % You should have received a copy of the GNU General Public License
 % along with Netcruncher.  If not, see <http://www.gnu.org/licenses/>.
-HAAS_BIOROID_COLOR = [146, 33, 190];
-JINTEKI_COLOR = [199, 77, 51];
-NBN_COLOR = [206, 171, 31];
-WEYLAND_COLOR = [94, 136, 123];
+HAAS_BIOROID_COLOR = [146, 33, 190]/255;
+JINTEKI_COLOR = [199, 77, 51]/255;
+NBN_COLOR = [206, 171, 31]/255;
+WEYLAND_COLOR = [94, 136, 123]/255;
 
-ANARCH_COLOR = [196, 96, 30];
-CRIMINAL_COLOR = [30, 142, 196];
-SHAPER_COLOR = [81, 146, 21];
+ANARCH_COLOR = [196, 96, 30]/255;
+CRIMINAL_COLOR = [30, 142, 196]/255;
+SHAPER_COLOR = [81, 146, 21]/255;
