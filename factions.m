@@ -125,13 +125,18 @@ clf;
 colormap([[linspace(1,0,128)';zeros(128,1)],zeros(256,1),[zeros(128,1);linspace(0,1,128)']]);
 imagesc(matchup_win_rates_nonans', [0, 1]);
 % This colormap is a linear red-black-blue gradient
-title(['Corps'' win rates in specific matchups (' num2str(MIN_MATCHES) '+ matches)']);
+title(['Corp - Runner win rate % in specific matchups (' num2str(MIN_MATCHES) '+ matches)']);
 set(gca, 'XTick', Factions_Corp, 'XTickLabel', Faction_Labels_Corp, 'YTick', Factions_Runner, 'YTickLabel', Faction_Labels_Runner);
 colorbar;
 
 for corp_id=Factions_Corp
     for runner_id=Factions_Runner
-        t=text(corp_id, runner_id, [num2str(round(matchup_win_rates(corp_id, runner_id)*100)) ' %']);
+        if isnan(matchup_win_rates(corp_id, runner_id))
+            txt = 'N/A';
+        else
+            txt = [num2str(round(matchup_win_rates(corp_id, runner_id)*100)) ' - ' num2str(round((1-matchup_win_rates(corp_id, runner_id))*100))];
+        end
+        t=text(corp_id, runner_id, txt);
         set(t, 'Color', 0.7*[1 1 1], 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle');
     end
 end
