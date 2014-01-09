@@ -54,36 +54,21 @@ for file in "$@"; do
     fi
     extension=$(basename "$file" | grep -oE "\.([^.]*)$" | cut -d . -f 2)
 
-    lines_before_copyright=0
     case $extension in
         m)
             row_prefix="% "
             ;;
         sh)
             row_prefix="# "
-            if head -n1 "$file" | grep -qE "^#!"; then
-                lines_before_copyright=1
-            fi
             ;;
     esac
-
-    head -n${lines_before_copyright} "$file" >> "$tmpfile"
 
     print_formatted_copyright() {
         # Add comment prefix and strip trailing spaces
         print_copyright | sed "s/^/${row_prefix}/" | sed 's/[[:space:]]*$//'
     }
     print_formatted_copyright >> "$tmpfile"
-
-    # Check if target file already contains the first row of the copyright notice
-    if grep -q "$(print_formatted_copyright | head -n1)" "$file"; then
-        # Copyright notice already exists - replace it
-        last_copyright_line=$(print_formatted_copyright | grep -n "$(tail -n1 $tmpfile)" | cut -d : -f 1)
-        tail -n+$((last_copyright_line+1)) "$file" >> "$tmpfile"
-    else
-        # No previous copyright notice
-        tail -n+$((lines_before_copyright+1)) "$file" >> "$tmpfile"
-    fi
+    cat "$file" >> "$tmpfile"
 
     mv "$tmpfile" "$file"
 done
