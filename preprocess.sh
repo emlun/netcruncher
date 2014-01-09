@@ -239,6 +239,25 @@ if $replace_factions; then
             echo "Faction_Labels_${side} = {" >> "$output"
             cut -d = -f 1 "$src" | sed 's/Haas_/Haas-/g' | sed 's/Weyland_/Weyland /' | sed 's/^[^_]*_//' | sed 's/_/ /g' | sed "s/.*/'\0';/" >> "$output"
             echo '};' >> "$output"
+
+            # Make faction-specific label lists
+
+            case "$side" in
+                Corp)
+                    factions="Haas_Bioroid Jinteki NBN Weyland"
+                    ;;
+                Runner)
+                    factions="Anarch Criminal Shaper"
+                    ;;
+            esac
+            for faction in $factions; do
+                cat << EOF >> "$output"
+Faction_Labels_${faction} = {};
+for i=1:length(Factions_${faction})
+    Faction_Labels_${faction}{i}=Faction_Labels_${side}{Factions_${faction}(i)};
+end
+EOF
+            done
         fi
 
         $dry_run || rm "$src"
