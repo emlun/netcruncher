@@ -66,6 +66,12 @@ bar_faction(corp_id_win_rates, Factions_Jinteki, JINTEKI_COLOR);
 bar_faction(corp_id_win_rates, Factions_NBN, NBN_COLOR);
 bar_faction(corp_id_win_rates, Factions_Weyland, WEYLAND_COLOR);
 
+for i=1:length(Factions_Corp),
+    TH(i) = text(1, i+0.1, [num2str(round(corp_id_win_rates(i)*100)) ' %']);
+end
+% Use the handles TH to modify some properties
+set(TH,'HorizontalAlignment', 'right', 'VerticalAlignment', 'middle');
+
 title('Corp identities'' win rates');
 xlabel('Win rate');
 set(gca, 'YTickLabel', Faction_Labels_Corp);
@@ -80,6 +86,12 @@ plot([0.5,0.5],[0.5,Factions_Runner(end)+0.5],'r')
 bar_faction(runner_id_win_rates, Factions_Anarch, ANARCH_COLOR);
 bar_faction(runner_id_win_rates, Factions_Criminal, CRIMINAL_COLOR);
 bar_faction(runner_id_win_rates, Factions_Shaper, SHAPER_COLOR);
+
+for i=1:length(Factions_Runner),
+    TH(i) = text(1, i+0.1, [num2str(round(runner_id_win_rates(i)*100)) ' %']);
+end
+% Use the handles TH to modify some properties
+set(TH,'HorizontalAlignment', 'right', 'VerticalAlignment', 'middle');
 
 title('Runner identities'' win rates');
 xlabel('Win rate');
