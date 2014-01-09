@@ -29,11 +29,13 @@ end
 figure(fignum);
 clf;
 h=pie(corp_faction_match_counts);
+title('Corp identity prevalences');
 align_pie_labels(h, Faction_Labels_Corp);
 colormap(Colormap_Corp);
 
 figure(fignum+1);
 clf;
 h=pie(runner_faction_match_counts);
+title('Runner identity prevalences');
 align_pie_labels(h, Faction_Labels_Runner);
 colormap(Colormap_Runner);
