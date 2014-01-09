@@ -61,14 +61,10 @@ subplot(1,2,1);
 hold on;
 plot([0.5,0.5],[0.5,Factions_Corp(end)+0.5],'r')
 
-h=barh(Factions_Haas_Bioroid, corp_id_win_rates(Factions_Haas_Bioroid));
-set(h, 'FaceColor', HAAS_BIOROID_COLOR);
-h=barh(Factions_Jinteki, corp_id_win_rates(Factions_Jinteki));
-set(h, 'FaceColor', JINTEKI_COLOR);
-h=barh(Factions_NBN, corp_id_win_rates(Factions_NBN));
-set(h, 'FaceColor', NBN_COLOR);
-h=barh(Factions_Weyland, corp_id_win_rates(Factions_Weyland));
-set(h, 'FaceColor', WEYLAND_COLOR);
+bar_faction(corp_id_win_rates, Factions_Haas_Bioroid, HAAS_BIOROID_COLOR);
+bar_faction(corp_id_win_rates, Factions_Jinteki, JINTEKI_COLOR);
+bar_faction(corp_id_win_rates, Factions_NBN, NBN_COLOR);
+bar_faction(corp_id_win_rates, Factions_Weyland, WEYLAND_COLOR);
 
 title('Corp identities'' win rates');
 xlabel('Win rate');
@@ -81,12 +77,9 @@ hold on;
 barh(runner_id_win_rates);
 plot([0.5,0.5],[0.5,Factions_Runner(end)+0.5],'r')
 
-h=barh(Factions_Anarch, runner_id_win_rates(Factions_Anarch));
-set(h, 'FaceColor', ANARCH_COLOR);
-h=barh(Factions_Criminal, runner_id_win_rates(Factions_Criminal));
-set(h, 'FaceColor', CRIMINAL_COLOR);
-h=barh(Factions_Shaper, runner_id_win_rates(Factions_Shaper));
-set(h, 'FaceColor', SHAPER_COLOR);
+bar_faction(runner_id_win_rates, Factions_Anarch, ANARCH_COLOR);
+bar_faction(runner_id_win_rates, Factions_Criminal, CRIMINAL_COLOR);
+bar_faction(runner_id_win_rates, Factions_Shaper, SHAPER_COLOR);
 
 title('Runner identities'' win rates');
 xlabel('Win rate');
