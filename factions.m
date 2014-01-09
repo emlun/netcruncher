@@ -50,7 +50,7 @@ end
 
 runner_id_win_rates = zeros(length(Factions_Runner),1);
 for runner_id=Factions_Runner
-    win_runner_id = matches(matches(:,Player_Faction)==runner_id,Win);
+    win_runner_id = matches(matches(:,Opponent_Faction)==runner_id,Win);
     runner_id_win_rates(runner_id) = sum(win_runner_id==0)/size(win_runner_id,1);
 end
 
