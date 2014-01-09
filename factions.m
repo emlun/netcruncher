@@ -128,3 +128,10 @@ imagesc(matchup_win_rates_nonans', [0, 1]);
 title(['Corps'' win rates in specific matchups (' num2str(MIN_MATCHES) '+ matches)']);
 set(gca, 'XTick', Factions_Corp, 'XTickLabel', Faction_Labels_Corp, 'YTick', Factions_Runner, 'YTickLabel', Faction_Labels_Runner);
 colorbar;
+
+for corp_id=Factions_Corp
+    for runner_id=Factions_Runner
+        t=text(corp_id, runner_id, [num2str(round(matchup_win_rates(corp_id, runner_id)*100)) ' %']);
+        set(t, 'Color', 0.7*[1 1 1], 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle');
+    end
+end
