@@ -68,5 +68,3 @@ Netcruncher is licensed under the [GNU General Public
 Licence][gpl-home], version 2 or later.
 
 [gpl-home]: https://www.gnu.org/licenses/
-
-vim: tw=70:ts=2:sw=2:et
