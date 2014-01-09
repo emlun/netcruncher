@@ -98,3 +98,22 @@ xlabel('Win rate');
 set(gca, 'YTickLabel', Faction_Labels_Runner);
 axis([0, 1, -Inf, Inf]);
 axis ij
+
+%% Identity matchup stats
+
+matchup_win_rates = zeros(length(Factions_Corp), length(Factions_Runner));
+for corp_id=Factions_Corp
+    for runner_id=Factions_Runner
+        matchup_wins=matches(matches(:,Player_Faction)==corp_id & matches(:,Opponent_Faction)==runner_id, Win);
+        matchup_win_rates(corp_id,runner_id)=sum(matchup_wins)/size(matchup_wins,1);
+    end
+end
+
+figure(fignum+3);
+clf;
+colormap([[linspace(1,0,128)';zeros(128,1)],zeros(256,1),[zeros(128,1);linspace(0,1,128)']]);
+imagesc(matchup_win_rates', [0, 1]);
+% This colormap is a linear red-black-blue gradient
+title('Corps'' win rates in specific matchups');
+set(gca, 'XTick', Factions_Corp, 'XTickLabel', Faction_Labels_Corp, 'YTick', Factions_Runner, 'YTickLabel', Faction_Labels_Runner);
+colorbar;
