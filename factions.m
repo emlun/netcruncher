@@ -14,6 +14,8 @@
 %
 % You should have received a copy of the GNU General Public License
 % along with Netcruncher.  If not, see <http://www.gnu.org/licenses/>.
+MIN_MATCHES = 4;
+
 figure(fignum);
 
 corp_faction_match_counts = zeros(size(Factions_Corp));
@@ -42,16 +44,20 @@ colormap(Colormap_Runner);
 
 %% Identities' win rates
 
-corp_id_win_rates = zeros(length(Factions_Corp),1);
+corp_id_win_rates = nan(length(Factions_Corp),1);
 for corp_id=Factions_Corp
     win_corp_id = matches(matches(:,Player_Faction)==corp_id,Win);
-    corp_id_win_rates(corp_id) = sum(win_corp_id)/size(win_corp_id,1);
+    if size(win_corp_id, 1) >= MIN_MATCHES
+        corp_id_win_rates(corp_id) = sum(win_corp_id)/size(win_corp_id,1);
+    end
 end
 
-runner_id_win_rates = zeros(length(Factions_Runner),1);
+runner_id_win_rates = nan(length(Factions_Runner),1);
 for runner_id=Factions_Runner
     win_runner_id = matches(matches(:,Opponent_Faction)==runner_id,Win);
-    runner_id_win_rates(runner_id) = sum(win_runner_id==0)/size(win_runner_id,1);
+    if size(win_runner_id, 1) >= MIN_MATCHES
+        runner_id_win_rates(runner_id) = sum(win_runner_id==0)/size(win_runner_id,1);
+    end
 end
 
 figure(fignum+2);
@@ -101,19 +107,24 @@ axis ij
 
 %% Identity matchup stats
 
-matchup_win_rates = zeros(length(Factions_Corp), length(Factions_Runner));
+matchup_win_rates = nan(length(Factions_Corp), length(Factions_Runner));
 for corp_id=Factions_Corp
     for runner_id=Factions_Runner
         matchup_wins=matches(matches(:,Player_Faction)==corp_id & matches(:,Opponent_Faction)==runner_id, Win);
-        matchup_win_rates(corp_id,runner_id)=sum(matchup_wins)/size(matchup_wins,1);
+        if size(matchup_wins,1) >= MIN_MATCHES
+            matchup_win_rates(corp_id,runner_id)=sum(matchup_wins)/size(matchup_wins,1);
+        end
     end
 end
+% Prevent these cells from lighting up the diagram
+matchup_win_rates_nonans = matchup_win_rates;
+matchup_win_rates_nonans(isnan(matchup_win_rates)) = 0.5;
 
 figure(fignum+3);
 clf;
 colormap([[linspace(1,0,128)';zeros(128,1)],zeros(256,1),[zeros(128,1);linspace(0,1,128)']]);
-imagesc(matchup_win_rates', [0, 1]);
+imagesc(matchup_win_rates_nonans', [0, 1]);
 % This colormap is a linear red-black-blue gradient
-title('Corps'' win rates in specific matchups');
+title(['Corps'' win rates in specific matchups (' num2str(MIN_MATCHES) '+ matches)']);
 set(gca, 'XTick', Factions_Corp, 'XTickLabel', Faction_Labels_Corp, 'YTick', Factions_Runner, 'YTickLabel', Faction_Labels_Runner);
 colorbar;
