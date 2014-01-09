@@ -199,13 +199,6 @@ if $replace_factions; then
         echo "Making list of ${side} identity integers..."
         $dry_run || echo "Factions_${side} = 1:$(wc -l $src | cut -d \  -f 1);" >> "$output"
 
-        echo "Making identity name labels..."
-        if ! $dry_run; then
-            echo "Faction_Labels_${side} = {" >> "$output"
-            cut -d = -f 1 "$src" | sed 's/Haas_/Haas-/g' | sed 's/Weyland_/Weyland /' | sed 's/^[^_]*_//' | sed 's/_/ /g' | sed "s/.*/'\0';/" >> "$output"
-            echo '};' >> "$output"
-        fi
-
         echo "Making ${side} colormap for coloring graphs..."
         if ! $dry_run; then
             echo "Colormap_${side} = [" >> "$output"
@@ -240,6 +233,13 @@ if $replace_factions; then
                 make_faction_loyalty "Anarch" "Criminal" "Shaper"
                 ;;
         esac
+
+        echo "Making identity name labels..."
+        if ! $dry_run; then
+            echo "Faction_Labels_${side} = {" >> "$output"
+            cut -d = -f 1 "$src" | sed 's/Haas_/Haas-/g' | sed 's/Weyland_/Weyland /' | sed 's/^[^_]*_//' | sed 's/_/ /g' | sed "s/.*/'\0';/" >> "$output"
+            echo '};' >> "$output"
+        fi
 
         $dry_run || rm "$src"
     }
