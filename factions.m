@@ -125,7 +125,7 @@ clf;
 colormap([[linspace(1,0,128)';zeros(128,1)],zeros(256,1),[zeros(128,1);linspace(0,1,128)']]);
 imagesc(matchup_win_rates_nonans', [0, 1]);
 % This colormap is a linear red-black-blue gradient
-title(['Corp - Runner win rate % in specific matchups (' num2str(MIN_MATCHES) '+ matches)']);
+title(['Corp - Runner matchup win rate % (' num2str(MIN_MATCHES) '+ matches)']);
 set(gca, 'XTick', Factions_Corp, 'XTickLabel', Faction_Labels_Corp, 'YTick', Factions_Runner, 'YTickLabel', Faction_Labels_Runner);
 
 for corp_id=Factions_Corp
