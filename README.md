@@ -3,9 +3,9 @@ Netcruncher
 
 Fully automated analysis of Android: Netrunner statistics
 
-This project is home to scripts for number crunching on dbzer0's Android:
-Netrunner OCTGN statistics. The vision is to allow fully automated analysis of
-said statistics.
+This project is home to scripts for number crunching on Android: Netrunner
+statistics, specifically in the format produced by dbzer0's OCTGN game
+definition. The vision is to allow fully automated analysis of said statistics.
 
 Prerequisites
 -------------
@@ -19,14 +19,14 @@ Prerequisites
 
 [octave-statistics]: http://octave.sourceforge.net/statistics/index.html
 
-At this time I have no plans to port the bash script to Windows, but feel to
-contribute a port. Using cygwin should work fine otherwise.
+At this time I have no plans to port the bash script to Windows, but feel free
+to contribute a port. Using cygwin should work fine otherwise.
 
 Usage
 -----
 
 First, run the `preprocess.sh` script. It expects a single positional parameter
-which is a statistics file released by dbzer0:
+which is a statistics file in the format released by dbzer0:
 
     $ ./preprocess.sh data/OCTGN_stats_anonymized-2013-09-12.csv
 
